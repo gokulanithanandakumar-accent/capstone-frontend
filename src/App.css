@@ -1876,3 +1876,264 @@ td.wrap {
     grid-column: 1 / -1;
   }
 }
+
+
+.registered-policies-section {
+  margin-top: 4px;
+}
+
+.payment-policy-list-heading {
+  margin-top: 0;
+}
+
+
+/* Policy card grid */
+
+.registered-policy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+
+/* Individual policy card */
+
+.registered-policy-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-top: 4px solid #7c3aed;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.registered-policy-card::after {
+  position: absolute;
+  top: -45px;
+  right: -45px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(124, 58, 237, 0.055);
+  content: "";
+  pointer-events: none;
+}
+
+.registered-policy-card:hover {
+  border-color: #cbbcf0;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+
+/* Currently selected policy */
+
+.registered-policy-card-selected {
+  border-color: var(--primary-500);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(245, 243, 255, 0.9),
+      #ffffff 55%
+    );
+  box-shadow:
+    0 0 0 3px rgba(124, 58, 237, 0.09),
+    var(--shadow-md);
+}
+
+
+/* Card header */
+
+.registered-policy-card-header {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+}
+
+.registered-policy-icon {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 13px;
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    var(--primary-500),
+    var(--primary-800)
+  );
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.registered-policy-title {
+  min-width: 0;
+}
+
+.registered-policy-card-header h3 {
+  overflow: hidden;
+  margin: 0;
+  color: #302740;
+  font-size: 0.93rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.registered-policy-card-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.registered-policy-card-header .status {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+
+/* Policy information */
+
+.registered-policy-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 16px 0;
+  border-top: 1px solid #eeeaf4;
+  border-bottom: 1px solid #eeeaf4;
+}
+
+.registered-policy-details > div {
+  min-width: 0;
+  padding: 10px 8px 10px 0;
+}
+
+.registered-policy-details > div:nth-child(even) {
+  padding-left: 11px;
+  border-left: 1px solid #eeeaf4;
+}
+
+.registered-policy-details dt {
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+
+.registered-policy-details dd {
+  margin: 4px 0 0;
+  overflow: hidden;
+  color: #342c45;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* Policy status */
+
+.policy-status-active {
+  color: #13795b;
+  background: #e8f8f1;
+}
+
+.policy-status-inactive,
+.policy-status-cancelled,
+.policy-status-expired {
+  color: #b42318;
+  background: #fef0ee;
+}
+
+
+/* View Premium Details button */
+
+.registered-policy-button {
+  width: 100%;
+  margin-top: auto;
+}
+
+
+/* Loading skeleton */
+
+.registered-policy-card-loading {
+  min-height: 270px;
+  border-top-color: #d8d0e7;
+  background:
+    linear-gradient(
+      100deg,
+      #f4f2f7 20%,
+      #fbfafc 40%,
+      #f4f2f7 60%
+    );
+  background-size: 200% 100%;
+  animation: registered-policy-loading 1.4s infinite;
+}
+
+.registered-policy-card-loading::after {
+  display: none;
+}
+
+@keyframes registered-policy-loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+
+/* Tablet */
+
+@media (max-width: 1180px) {
+  .registered-policy-grid {
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+  }
+}
+
+
+/* Mobile */
+
+@media (max-width: 680px) {
+  .registered-policy-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .registered-policy-card {
+    padding: 16px;
+  }
+
+  .registered-policy-card-header {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .registered-policy-card-header .status {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .registered-policy-details {
+    grid-template-columns: 1fr;
+  }
+
+  .registered-policy-details > div {
+    padding: 9px 0;
+  }
+
+  .registered-policy-details > div:nth-child(even) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { extractErrorMessage } from '../api/client';
-import { fetchPolicyPremiums, payPremiums } from '../api/dashboardApi';
+import { fetchMyPolicies, fetchPolicyPremiums, payPremiums } from '../api/dashboardApi';
 import {
   formatCurrency,
   formatDate,
@@ -132,6 +132,9 @@ export default function PremiumPaymentPage() {
   const [submitting, setSubmitting] = useState(false);
   const [payError, setPayError] = useState('');
   const [result, setResult] = useState(null);
+  const [registeredPolicies, setRegisteredPolicies] = useState([]);
+const [policiesLoading, setPoliciesLoading] = useState(true);
+const [policiesError, setPoliciesError] = useState('');
 
   const load = useCallback(async (number) => {
     setLoading(true);
@@ -145,6 +148,41 @@ export default function PremiumPaymentPage() {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+  let active = true;
+
+  setPoliciesLoading(true);
+  setPoliciesError('');
+
+  fetchMyPolicies()
+    .then((policies) => {
+      if (active) {
+        setRegisteredPolicies(policies ?? []);
+      }
+    })
+    .catch((error) => {
+      if (active) {
+        setRegisteredPolicies([]);
+        setPoliciesError(
+          extractErrorMessage(
+            error,
+            'Unable to load your registered policies.',
+          ),
+        );
+      }
+    })
+    .finally(() => {
+      if (active) {
+        setPoliciesLoading(false);
+      }
+    });
+
+  return () => {
+    active = false;
+  };
+}, []);
+
 
   useEffect(() => {
     setSearchInput(policyNumber);
@@ -174,6 +212,19 @@ export default function PremiumPaymentPage() {
       setSearchParams({ policyNumber: value });
     }
   };
+
+  const handlePolicySelection = (selectedPolicyNumber) => {
+  setSearchInput(selectedPolicyNumber);
+  setSearchError('');
+  setLoadError('');
+  setResult(null);
+
+  if (selectedPolicyNumber === policyNumber) {
+    load(selectedPolicyNumber);
+  } else {
+    setSearchParams({ policyNumber: selectedPolicyNumber });
+  }
+};
 
   const toggleInstallment = (installment) => {
     setResult(null);
@@ -302,6 +353,177 @@ export default function PremiumPaymentPage() {
           </div>
         )}
       </section>
+
+      <section
+  className="registered-policies-section"
+  aria-labelledby="registered-policies-heading"
+>
+  <div className="section-title-row payment-policy-list-heading">
+    <div>
+      <p className="eyebrow">YOUR COVERAGE</p>
+
+      <h2 id="registered-policies-heading">
+        Registered Policies
+      </h2>
+
+      <p>
+        Select a policy to view its premium summary, installment schedule,
+        outstanding amount and payment history.
+      </p>
+    </div>
+
+    {!policiesLoading && !policiesError && (
+      <span className="result-count">
+        {registeredPolicies.length}{' '}
+        {registeredPolicies.length === 1 ? 'policy' : 'policies'}
+      </span>
+    )}
+  </div>
+
+  {policiesLoading && (
+    <div
+      className="registered-policy-grid"
+      aria-label="Loading registered policies"
+    >
+      {[1, 2, 3].map((item) => (
+        <div
+          key={item}
+          className="registered-policy-card registered-policy-card-loading"
+        />
+      ))}
+    </div>
+  )}
+
+  {policiesError && (
+    <div className="alert alert-error" role="alert">
+      {policiesError}
+    </div>
+  )}
+
+  {!policiesLoading &&
+    !policiesError &&
+    registeredPolicies.length === 0 && (
+      <div className="empty-state">
+        <div className="empty-state-icon" aria-hidden="true">
+          ▣
+        </div>
+
+        <h3>No registered policies</h3>
+
+        <p>
+          Register an available insurance product before making a premium
+          payment.
+        </p>
+      </div>
+    )}
+
+  {!policiesLoading &&
+    !policiesError &&
+    registeredPolicies.length > 0 && (
+      <div className="registered-policy-grid">
+        {registeredPolicies.map((policy) => {
+          const isSelected =
+            policy.policyNumber === policyNumber;
+
+          return (
+            <article
+              key={policy.policyNumber}
+              className={`registered-policy-card${
+                isSelected
+                  ? ' registered-policy-card-selected'
+                  : ''
+              }`}
+            >
+              <div className="registered-policy-card-header">
+                <div
+                  className="registered-policy-icon"
+                  aria-hidden="true"
+                >
+                  {formatEnum(policy.policyType).slice(0, 1)}
+                </div>
+
+                <div className="registered-policy-title">
+                  <h3>{policy.policyName}</h3>
+                  <p>{policy.policyNumber}</p>
+                </div>
+
+                <span
+                  className={`status policy-status-${String(
+                    policy.status || '',
+                  ).toLowerCase()}`}
+                >
+                  {formatEnum(policy.status)}
+                </span>
+              </div>
+
+              <dl className="registered-policy-details">
+                <div>
+                  <dt>Policy Type</dt>
+                  <dd>{formatEnum(policy.policyType)}</dd>
+                </div>
+
+                <div>
+                  <dt>Policy Term</dt>
+                  <dd>{formatTerm(policy.termMonths)}</dd>
+                </div>
+
+                <div>
+                  <dt>Premium Amount</dt>
+                  <dd>{formatCurrency(policy.premiumAmount)}</dd>
+                </div>
+
+                <div>
+                  <dt>Premium Frequency</dt>
+                  <dd>
+                    {formatEnum(policy.premiumFrequency)}
+                  </dd>
+                </div>
+
+                <div>
+                  <dt>Sum Insured</dt>
+                  <dd>{formatCurrency(policy.sumInsured)}</dd>
+                </div>
+
+                <div>
+                  <dt>Policy Status</dt>
+                  <dd>{formatEnum(policy.status)}</dd>
+                </div>
+
+                <div>
+                  <dt>Start Date</dt>
+                  <dd>{formatDate(policy.startDate)}</dd>
+                </div>
+
+                <div>
+                  <dt>Maturity Date</dt>
+                  <dd>{formatDate(policy.maturityDate)}</dd>
+                </div>
+              </dl>
+
+              <button
+                type="button"
+                className={
+                  isSelected
+                    ? 'btn btn-secondary registered-policy-button'
+                    : 'btn btn-primary registered-policy-button'
+                }
+                onClick={() =>
+                  handlePolicySelection(policy.policyNumber)
+                }
+                disabled={loading && isSelected}
+              >
+                {loading && isSelected
+                  ? 'Loading Details...'
+                  : isSelected
+                    ? 'Refresh Premium Details'
+                    : 'View Premium Details'}
+              </button>
+            </article>
+          );
+        })}
+      </div>
+    )}
+</section>
 
         {result && (
           <section className="card" aria-labelledby="payment-success-heading">
