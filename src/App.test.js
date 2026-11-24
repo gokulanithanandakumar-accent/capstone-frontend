@@ -1,8 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+jest.mock('./api/authApi');
+jest.mock('./api/dashboardApi');
+
+test('renders the login page for unauthenticated users', () => {
+  sessionStorage.clear();
+  window.history.pushState({}, '', '/');
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText('Customer Login')).toBeInTheDocument();
 });
