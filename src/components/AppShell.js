@@ -1,11 +1,11 @@
-import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
 const navigationItems = [
   { to: '/dashboard', icon: '⌂', label: 'Dashboard', end: true },
-  { to: '/products', icon: '▦', label: 'Available Policies' },
+  { to: '/dashboard#available-policies', icon: '▦', label: 'Available Policies' },
   { to: '/recommendations', icon: '✦', label: 'AI Recommendations' },
-  { to: '/policies/register', icon: '▣', label: 'Register Policy' },
   { to: '/policies/payments', icon: '▤', label: 'Premium Payments' },
   { to: '/policies/search', icon: '⌕', label: 'Search Policies' },
 ];
@@ -15,10 +15,10 @@ export default function AppShell({
   subtitle,
   children,
   onLogout,
-  searchValue = '',
-  onSearchChange,
 }) {
-  const { customer } = useAuth();
+  const { customer, logout } = useAuth();
+  const navigate = useNavigate();
+  const [searchValue, setSearchValue] = useState('');
 
   const initials =
     customer?.fullName
@@ -28,11 +28,35 @@ export default function AppShell({
       .map((part) => part[0].toUpperCase())
       .join('') || 'HD';
 
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+      return;
+    }
+
+    logout();
+    navigate('/login', { replace: true });
+  };
+
+  const handleGlobalSearch = (event) => {
+    event.preventDefault();
+
+    const value = searchValue.trim();
+    if (!value) {
+      return;
+    }
+
+    navigate(`/policies/search?query=${encodeURIComponent(value)}`);
+  };
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-mark">◆</div>
+          <div className="brand-mark" aria-hidden="true">
+            ◆
+          </div>
+
           <div>
             <strong>HealthDekho</strong>
             <span>Secure Today. Healthier Tomorrow.</span>
@@ -58,15 +82,17 @@ export default function AppShell({
         </nav>
 
         <div className="sidebar-promo">
-          <div className="promo-icon">☂</div>
+          <div className="promo-icon" aria-hidden="true">
+            ☂
+          </div>
           <strong>Protection Today</strong>
           <span>Brighter Tomorrow</span>
-          <p>Explore plans designed around your changing needs.</p>
+          <p>Explore insurance plans designed around your changing needs.</p>
         </div>
 
         <div className="sidebar-footer-links">
-          <a href="#support">Help & Support</a>
-          <button type="button" onClick={onLogout}>
+          <a href="mailto:support@healthdekho.example">Help & Support</a>
+          <button type="button" onClick={handleLogout}>
             Sign out
           </button>
         </div>
@@ -75,20 +101,22 @@ export default function AppShell({
       <div className="app-workspace">
         <header className="topbar">
           <div className="mobile-brand">
-            <span className="brand-mark">◆</span>
+            <span className="brand-mark" aria-hidden="true">
+              ◆
+            </span>
             <strong>HealthDekho</strong>
           </div>
 
-          <label className="global-search">
+          <form className="global-search" onSubmit={handleGlobalSearch}>
             <span aria-hidden="true">⌕</span>
             <input
               type="search"
               value={searchValue}
-              onChange={onSearchChange}
-              placeholder="Search policies, products or help..."
-              aria-label="Global search"
+              onChange={(event) => setSearchValue(event.target.value)}
+              placeholder="Search using a policy identifier..."
+              aria-label="Search policies"
             />
-          </label>
+          </form>
 
           <div className="topbar-actions">
             <button
@@ -127,7 +155,7 @@ export default function AppShell({
           <div>
             <a href="#privacy">Privacy Policy</a>
             <a href="#terms">Terms of Use</a>
-            <a href="#support">Support</a>
+            <a href="mailto:support@healthdekho.example">Support</a>
           </div>
         </footer>
       </div>

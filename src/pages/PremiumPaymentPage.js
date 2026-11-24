@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { extractErrorMessage } from '../api/client';
 import { fetchPolicyPremiums, payPremiums } from '../api/dashboardApi';
-import { formatCurrency, formatDate, formatEnum, formatTerm } from '../utils/format';
+import {
+  formatCurrency,
+  formatDate,
+  formatEnum,
+  formatTerm,
+} from '../utils/format';
+import AppShell from '../components/AppShell';
 
 const PAYMENT_METHODS = [
   ['UPI', 'UPI'],
@@ -51,7 +57,10 @@ function PolicySummary({ policy }) {
     ['Total Late Payment Penalty Paid', formatCurrency(policy.totalPenaltyPaid)],
   ];
   return (
-    <section className="card" aria-labelledby="policy-summary-heading">
+    <section
+  className="card payment-summary-card"
+  aria-labelledby="policy-summary-heading"
+>
       <h2 id="policy-summary-heading">Policy Summary</h2>
       <dl className="details">
         {fields.map(([label, value]) => (
@@ -67,7 +76,10 @@ function PolicySummary({ policy }) {
 
 function PaymentHistory({ payments }) {
   return (
-    <section className="card" aria-labelledby="payment-history-heading">
+    <section
+  className="card payment-history-card"
+  aria-labelledby="payment-history-heading"
+>
       <h2 id="payment-history-heading">Payment History</h2>
       {payments.length === 0 ? (
         <p className="empty-message">No premium payments have been made for this policy yet.</p>
@@ -227,36 +239,69 @@ export default function PremiumPaymentPage() {
   const selectedTotal = Object.values(selected).reduce((sum, value) => sum + (Number(value) || 0), 0);
 
   return (
-    <div className="page">
-      <header className="app-header">
-        <h1>Premium Payments</h1>
-        <Link to="/dashboard" className="btn btn-secondary">Back to Dashboard</Link>
-      </header>
-      <main className="content">
-        <section className="card" aria-labelledby="policy-search-heading">
-          <h2 id="policy-search-heading">Search Policy</h2>
-          <form onSubmit={handleSearch} noValidate aria-label="Policy search" className="form-grid">
-            <label htmlFor="policy-identifier">
-              Policy Identifier
-              <input
-                id="policy-identifier"
-                name="policyNumber"
-                type="text"
-                placeholder="e.g. HDP-2026-0001"
-                value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}
-                aria-invalid={Boolean(searchError)}
-              />
-              {searchError && <span className="field-error">{searchError}</span>}
-            </label>
-            <div>
-              <button type="submit" className="btn btn-primary" disabled={loading}>
-                {loading ? 'Searching...' : 'Search'}
-              </button>
-            </div>
-          </form>
-          {loadError && <div className="alert alert-error" role="alert">{loadError}</div>}
-        </section>
+  <AppShell
+    title="Premium Payments"
+    subtitle="Search a registered policy, review its installment schedule and securely record premium payments."
+  >
+    <div className="payment-page">
+      <section
+        className="payment-search-hero"
+        aria-labelledby="policy-search-heading"
+      >
+        <div className="payment-search-copy">
+          <span className="payment-hero-icon" aria-hidden="true">
+            ₹
+          </span>
+          <div>
+            <p className="eyebrow">PREMIUM MANAGEMENT</p>
+            <h2 id="policy-search-heading">Find a registered policy</h2>
+            <p>
+              Enter the exact policy identifier to retrieve the premium
+              schedule, outstanding balance and payment history.
+            </p>
+          </div>
+        </div>
+
+        <form
+          onSubmit={handleSearch}
+          noValidate
+          aria-label="Policy search"
+          className="payment-search-form"
+        >
+          <label htmlFor="policy-identifier">
+            Policy Identifier
+            <input
+              id="policy-identifier"
+              name="policyNumber"
+              type="text"
+              placeholder="e.g. HDP-2026-0001"
+              value={searchInput}
+              onChange={(event) => {
+                setSearchInput(event.target.value);
+                setSearchError('');
+              }}
+              aria-invalid={Boolean(searchError)}
+            />
+            {searchError && (
+              <span className="field-error">{searchError}</span>
+            )}
+          </label>
+
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={loading}
+          >
+            {loading ? 'Searching...' : 'Search Policy'}
+          </button>
+        </form>
+
+        {loadError && (
+          <div className="alert alert-error" role="alert">
+            {loadError}
+          </div>
+        )}
+      </section>
 
         {result && (
           <section className="card" aria-labelledby="payment-success-heading">
@@ -296,7 +341,10 @@ export default function PremiumPaymentPage() {
             <PolicySummary policy={details.policy} />
 
             <form onSubmit={handlePay} noValidate aria-label="Premium payment">
-              <section className="card" aria-labelledby="schedule-heading">
+              <section
+  className="card payment-schedule-card"
+  aria-labelledby="schedule-heading"
+>
                 <h2 id="schedule-heading">Premium Installment Schedule</h2>
                 <p className="hint">
                   A late payment penalty of 10% of the outstanding premium applies after the one-month grace period.
@@ -396,7 +444,7 @@ export default function PremiumPaymentPage() {
             <PaymentHistory payments={details.payments} />
           </>
         )}
-      </main>
     </div>
+    </AppShell>
   );
 }

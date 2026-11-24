@@ -4,7 +4,6 @@ import { extractErrorMessage } from '../api/client';
 import { fetchAvailableProducts, fetchMyPolicies } from '../api/dashboardApi';
 import { useAuth } from '../auth/AuthContext';
 import { formatCurrency, formatDate, formatEnum, formatTerm } from '../utils/format';
-import RecommendationsSection from './RecommendationsSection';
 import AppShell from '../components/AppShell';
 import InsuranceProductCard from '../components/InsuranceProductCard';
 
@@ -87,68 +86,129 @@ function PoliciesSection() {
 
 function AvailableProductsSection({ loading, data, error }) {
   const navigate = useNavigate();
+  const [query, setQuery] = useState('');
+  const [policyType, setPolicyType] = useState('');
+
+  const policyTypes = [
+    ...new Set((data ?? []).map((product) => product.policyType)),
+  ];
+
+  const filteredProducts = (data ?? []).filter((product) => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    const matchesQuery =
+      !normalizedQuery ||
+      product.policyName?.toLowerCase().includes(normalizedQuery) ||
+      product.productCode?.toLowerCase().includes(normalizedQuery) ||
+      product.policyType?.toLowerCase().includes(normalizedQuery);
+
+    const matchesType =
+      !policyType || product.policyType === policyType;
+
+    return matchesQuery && matchesType;
+  });
 
   const handleRegister = (product) => {
     navigate('/policies/register', { state: { product } });
   };
 
   return (
-    <section className="card" aria-labelledby="available-heading">
-      <h2 id="available-heading">Available Insurance Policies</h2>
-      {loading && <p>Loading available policies...</p>}
-      {error && <div className="alert alert-error" role="alert">{error}</div>}
-      {!loading && !error && data.length === 0 && (
-        <p className="empty-message">There are no additional insurance policies available for you at the moment.</p>
+    <section id="available-policies" aria-labelledby="available-heading">
+      <div className="section-title-row">
+        <div>
+          <p className="eyebrow">EXPLORE COVERAGE</p>
+          <h2 id="available-heading">Available Insurance Policies</h2>
+          <p>
+            Compare eligible plans and register for the coverage that suits
+            your needs.
+          </p>
+        </div>
+        <span className="result-count">
+          {filteredProducts.length} available
+        </span>
+      </div>
+
+      <div className="filter-panel">
+        <label className="filter-search">
+          <span>Search products</span>
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search by policy name, type or product code"
+          />
+        </label>
+
+        <label>
+          <span>Policy type</span>
+          <select
+            value={policyType}
+            onChange={(event) => setPolicyType(event.target.value)}
+          >
+            <option value="">All types</option>
+            {policyTypes.map((type) => (
+              <option key={type} value={type}>
+                {formatEnum(type)}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => {
+            setQuery('');
+            setPolicyType('');
+          }}
+        >
+          Clear Filters
+        </button>
+      </div>
+
+      {loading && (
+        <div className="loading-grid" aria-label="Loading products">
+          {[1, 2, 3].map((item) => (
+            <div key={item} className="product-card product-skeleton" />
+          ))}
+        </div>
       )}
-      {!loading && !error && data.length > 0 && (
-        <div className="table-wrapper">
-          <table aria-label="Available insurance policies">
-            <thead>
-              <tr>
-                <th>Product Code</th>
-                <th>Policy Name</th>
-                <th>Policy Type</th>
-                <th>Policy Term</th>
-                <th>Sum Insured</th>
-                <th>Premium Frequency</th>
-                <th>Premium Amount</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((product) => (
-                <tr key={product.productId}>
-                  <td>{product.productCode}</td>
-                  <td>{product.policyName}</td>
-                  <td>{formatEnum(product.policyType)}</td>
-                  <td>{formatTerm(product.termMonths)}</td>
-                  <td>{formatCurrency(product.sumInsured)}</td>
-                  <td>{formatEnum(product.premiumFrequency)}</td>
-                  <td>{formatCurrency(product.premiumAmount)}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={() => handleRegister(product)}
-                      aria-label={`Register ${product.policyName}`}
-                    >
-                      Register
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+      {error && (
+        <div className="alert alert-error" role="alert">
+          {error}
+        </div>
+      )}
+
+      {!loading && !error && filteredProducts.length === 0 && (
+        <div className="empty-state">
+          <div className="empty-state-icon">▦</div>
+          <h3>No insurance policies found</h3>
+          <p>Try changing or clearing the selected filters.</p>
+        </div>
+      )}
+
+      {!loading && !error && filteredProducts.length > 0 && (
+        <div className="product-grid">
+          {filteredProducts.map((product) => (
+            <InsuranceProductCard
+              key={product.productId}
+              product={product}
+              onRegister={handleRegister}
+            />
+          ))}
         </div>
       )}
     </section>
   );
 }
-
 export default function DashboardPage() {
   const { customer, logout } = useAuth();
   const navigate = useNavigate();
-  const availableProducts = useLoad(fetchAvailableProducts, 'Unable to load available insurance policies.');
+  const availableProducts = useLoad(
+    fetchAvailableProducts,
+    'Unable to load available insurance policies.',
+  );
 
   const handleLogout = () => {
     logout();
@@ -156,25 +216,29 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="page">
-      <header className="app-header">
+    <AppShell
+      title="Customer Dashboard"
+      subtitle={`Welcome back, ${customer?.fullName || 'Customer'}. Manage your coverage, recommendations and premium payments.`}
+      onLogout={handleLogout}
+    >
+      <section className="dashboard-banner">
         <div>
-          <h1>HealthDekho</h1>
-          <p>Welcome, {customer?.fullName}</p>
+          <span className="banner-label">YOUR COVERAGE</span>
+          <h2>Protection for today and confidence for tomorrow</h2>
+          <p>
+            Review active policies, discover suitable plans and keep premium
+            payments up to date.
+          </p>
         </div>
-        <div>
-          <Link to="/policies/search" className="btn btn-secondary">Search Policies</Link>{' '}
-          <Link to="/policies/payments" className="btn btn-secondary">Premium Payments</Link>{' '}
-          <button type="button" className="btn btn-secondary" onClick={handleLogout}>
-            Logout
-          </button>
+        <div className="banner-shield" aria-hidden="true">
+          ◆
         </div>
-      </header>
-      <main className="content">
-        <PoliciesSection />
-        <AvailableProductsSection {...availableProducts} />
-        <RecommendationsSection availableProducts={availableProducts.data} />
-      </main>
-    </div>
+      </section>
+
+      <PoliciesSection />
+
+      <AvailableProductsSection {...availableProducts} />
+
+    </AppShell>
   );
 }

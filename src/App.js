@@ -7,45 +7,67 @@ import LoginPage from './pages/LoginPage';
 import PolicyRegistrationPage from './pages/PolicyRegistrationPage';
 import PolicySearchPage from './pages/PolicySearchPage';
 import PremiumPaymentPage from './pages/PremiumPaymentPage';
+import RecommendationsPage from './pages/RecommendationPage';
 
-export const routerFuture = { v7_startTransition: true, v7_relativeSplatPath: true };
+export const routerFuture = {
+  v7_startTransition: true,
+  v7_relativeSplatPath: true,
+};
+
+function ProtectedPage({ children }) {
+  return <ProtectedRoute>{children}</ProtectedRoute>;
+}
 
 export function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+
       <Route
         path="/dashboard"
-        element={(
-          <ProtectedRoute>
+        element={
+          <ProtectedPage>
             <DashboardPage />
-          </ProtectedRoute>
-        )}
+          </ProtectedPage>
+        }
       />
+
+      <Route
+        path="/recommendations"
+        element={
+          <ProtectedPage>
+            <RecommendationsPage />
+          </ProtectedPage>
+        }
+      />
+
       <Route
         path="/policies/register"
-        element={(
-          <ProtectedRoute>
+        element={
+          <ProtectedPage>
             <PolicyRegistrationPage />
-          </ProtectedRoute>
-        )}
+          </ProtectedPage>
+        }
       />
+
       <Route
         path="/policies/payments"
-        element={(
-          <ProtectedRoute>
+        element={
+          <ProtectedPage>
             <PremiumPaymentPage />
-          </ProtectedRoute>
-        )}
+          </ProtectedPage>
+        }
       />
+
       <Route
         path="/policies/search"
-        element={(
-          <ProtectedRoute>
+        element={
+          <ProtectedPage>
             <PolicySearchPage />
-          </ProtectedRoute>
-        )}
+          </ProtectedPage>
+        }
       />
+
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );

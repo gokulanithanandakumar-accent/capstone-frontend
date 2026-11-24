@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { extractErrorMessage } from '../api/client';
 import { searchPolicies } from '../api/dashboardApi';
+import { useAuth } from '../auth/AuthContext';
 import { formatCurrency, formatDate, formatEnum, todayIso } from '../utils/format';
+import AppShell from '../components/AppShell';
 
 export const PAGE_SIZE = 10;
 const POLICY_NUMBER_PATTERN = /^[A-Za-z0-9-]+$/;
@@ -59,6 +60,11 @@ export function validateCriteria(form) {
 
 /** FR-5 customer insurance policy search. */
 export default function PolicySearchPage() {
+    const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState('');
@@ -128,12 +134,12 @@ export default function PolicySearchPage() {
   const totalPages = response?.totalPages ?? 0;
 
   return (
-    <div className="page">
-      <header className="app-header">
-        <h1>Policy Search</h1>
-        <Link to="/dashboard" className="btn btn-secondary">Back to Dashboard</Link>
-      </header>
-      <main className="content">
+    <AppShell
+  title="Policy Search"
+  subtitle="Find customer policies using approved search criteria."
+  onLogout={handleLogout}
+>
+    <div className="content">
         <section className="card" aria-labelledby="search-criteria-heading">
           <h2 id="search-criteria-heading">Search Criteria</h2>
           <p className="hint">
@@ -143,14 +149,21 @@ export default function PolicySearchPage() {
             {field('customerName', 'Customer Name', { type: 'text', placeholder: 'e.g. Demo' })}
             {field('policyNumber', 'Policy Identifier', { type: 'text', placeholder: 'e.g. HDP-2026-0001' })}
             {field('dateOfBirth', 'Date of Birth', { type: 'date', max: todayIso() })}
-            <div>
-              <button type="submit" className="btn btn-primary" disabled={loading}>
-                {loading ? 'Searching...' : 'Search'}
-              </button>{' '}
-              <button type="button" className="btn btn-secondary" onClick={handleReset} disabled={loading}>
-                Clear
-              </button>
-            </div>
+            <div className="search-form-actions">
+  <button type="submit" className="btn btn-primary" disabled={loading}>
+    {loading ? 'Searching...' : 'Search'}
+  </button>
+
+  <button
+    type="button"
+    className="btn btn-secondary"
+    onClick={handleReset}
+    disabled={loading}
+  >
+    Clear
+  </button>
+</div>
+
           </form>
           {formError && <div className="alert alert-error" role="alert">{formError}</div>}
           {searchError && <div className="alert alert-error" role="alert">{searchError}</div>}
@@ -225,7 +238,7 @@ export default function PolicySearchPage() {
             )}
           </section>
         )}
-      </main>
     </div>
+    </AppShell>
   );
 }

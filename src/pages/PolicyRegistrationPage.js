@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { extractErrorMessage } from '../api/client';
-import { fetchRegistrationDetails, registerPolicy } from '../api/dashboardApi';
-import { formatCurrency, formatDate, formatEnum, formatTerm, todayIso } from '../utils/format';
+import {
+  fetchRegistrationDetails,
+  registerPolicy,
+} from '../api/dashboardApi';
+import {
+  formatCurrency,
+  formatDate,
+  formatEnum,
+  formatTerm,
+  todayIso,
+} from '../utils/format';
+import AppShell from '../components/AppShell';
 
 function validateStartDate(startDate) {
   if (!startDate) {
@@ -118,14 +128,47 @@ export default function PolicyRegistrationPage() {
   ];
 
   return (
-    <div className="page">
-      <header className="app-header">
-        <h1>Policy Registration</h1>
-        <Link to="/dashboard" className="btn btn-secondary">Back to Dashboard</Link>
-      </header>
-      <main className="content">
+  <AppShell
+    title="Register Insurance Policy"
+    subtitle="Review the selected product, confirm the policy start date and verify the calculated premium details."
+  >
+    <div className="registration-page">
+      {!registration && (
+        <div className="registration-progress" aria-label="Registration steps">
+          <div className="registration-step registration-step-active">
+            <span>1</span>
+            <div>
+              <strong>Policy Details</strong>
+              <small>Review customer and product</small>
+            </div>
+          </div>
+
+          <div className="registration-progress-line" />
+
+          <div className="registration-step registration-step-active">
+            <span>2</span>
+            <div>
+              <strong>Dates and Premium</strong>
+              <small>Confirm calculated values</small>
+            </div>
+          </div>
+
+          <div className="registration-progress-line" />
+
+          <div className="registration-step">
+            <span>3</span>
+            <div>
+              <strong>Confirmation</strong>
+              <small>Complete registration</small>
+            </div>
+          </div>
+        </div>
+      )}
         {registration ? (
-          <section className="card" aria-labelledby="registration-success-heading">
+          <section
+  className="card registration-success-card"
+  aria-labelledby="registration-success-heading"
+>
             <h2 id="registration-success-heading">Registration Successful</h2>
             <div className="alert alert-success" role="status">{registration.message}</div>
             <DetailList
@@ -143,18 +186,27 @@ export default function PolicyRegistrationPage() {
           </section>
         ) : (
           <form onSubmit={handleSubmit} noValidate aria-label="Policy registration">
-            <section className="card" aria-labelledby="customer-details-heading">
+            <section
+  className="card registration-customer-card"
+  aria-labelledby="customer-details-heading"
+>
               <h2 id="customer-details-heading">Customer Details</h2>
               <DetailList fields={customerFields} />
             </section>
 
-            <section className="card" aria-labelledby="selected-product-heading">
+            <section
+  className="card registration-product-card"
+  aria-labelledby="selected-product-heading"
+>
               <h2 id="selected-product-heading">Selected Insurance Product</h2>
               {recommendationItemId && <p className="hint">Selected from your AI recommendations.</p>}
               <DetailList fields={productFields} />
             </section>
 
-            <section className="card" aria-labelledby="policy-dates-heading">
+            <section
+  className="card registration-finance-card"
+  aria-labelledby="policy-dates-heading"
+>
               <h2 id="policy-dates-heading">Policy Dates and Premium</h2>
               <div className="form-grid">
                 <label htmlFor="policy-start-date">
@@ -185,7 +237,7 @@ export default function PolicyRegistrationPage() {
             </section>
           </form>
         )}
-      </main>
     </div>
+  </AppShell>
   );
 }
