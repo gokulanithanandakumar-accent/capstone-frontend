@@ -8,6 +8,8 @@ import PolicyRegistrationPage from './pages/PolicyRegistrationPage';
 import PolicySearchPage from './pages/PolicySearchPage';
 import PremiumPaymentPage from './pages/PremiumPaymentPage';
 import RecommendationsPage from './pages/RecommendationPage';
+import AvailablePoliciesPage from './pages/AvailablePoliciesPage';
+
 
 export const routerFuture = {
   v7_startTransition: true,
@@ -31,6 +33,15 @@ export function AppRoutes() {
           </ProtectedPage>
         }
       />
+
+      <Route
+  path="/policies/available"
+  element={
+    <ProtectedPage>
+      <AvailablePoliciesPage />
+    </ProtectedPage>
+  }
+/>
 
       <Route
         path="/recommendations"

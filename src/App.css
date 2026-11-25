@@ -1863,6 +1863,7 @@ td.wrap {
   display: flex;
   align-items: stretch;
   gap: 10px;
+  margin-top: 15px;
 }
 
 .search-form-actions .btn {
@@ -2137,3 +2138,1806 @@ td.wrap {
     border-left: 0;
   }
 }
+
+.dashboard-discovery-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 22px;
+  padding: 24px 28px;
+  border: 1px solid #ddd2f4;
+  border-radius: 16px;
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(124, 58, 237, 0.1),
+      transparent 30%
+    ),
+    linear-gradient(135deg, #ffffff, #f9f6ff);
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-discovery-card h2 {
+  margin: 5px 0 6px;
+  font-size: 1.15rem;
+}
+
+.dashboard-discovery-card p:not(.eyebrow) {
+  max-width: 720px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.dashboard-discovery-card .btn {
+  flex-shrink: 0;
+}
+
+@media (max-width: 680px) {
+  .dashboard-discovery-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-discovery-card .btn {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   DASHBOARD PLAN CAROUSEL
+   ========================================= */
+
+.dashboard-plans-section {
+  margin-top: 4px;
+}
+
+.dashboard-plans-heading {
+  margin-bottom: 17px;
+}
+
+.carousel-stage {
+  position: relative;
+  padding: 20px 54px 28px;
+  perspective: 1200px;
+}
+
+
+/* Carousel track */
+
+.dashboard-plan-carousel {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  padding: 25px calc(50% - 175px) 35px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+  cursor: grab;
+}
+
+.dashboard-plan-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.dashboard-plan-carousel:active {
+  cursor: grabbing;
+}
+
+
+/* Plan card */
+
+.dashboard-plan-card {
+  position: relative;
+  min-width: 350px;
+  max-width: 350px;
+  flex: 0 0 350px;
+  overflow: hidden;
+  padding: 22px;
+  border: 1px solid #e4dcf3;
+  border-radius: 22px;
+  scroll-snap-align: center;
+  color: #352c49;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(248, 245, 255, 0.96)
+    );
+  box-shadow:
+    0 12px 30px rgba(46, 27, 81, 0.08),
+    0 2px 7px rgba(46, 27, 81, 0.05);
+  transform:
+    perspective(900px)
+    rotateY(0deg)
+    scale(0.91);
+  opacity: 0.68;
+  transition:
+    transform 280ms ease,
+    opacity 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+
+/* Active center card */
+
+.dashboard-plan-card-active {
+  z-index: 2;
+  border-color: rgba(124, 58, 237, 0.45);
+  opacity: 1;
+  transform:
+    perspective(900px)
+    translateY(-7px)
+    rotateY(0deg)
+    scale(1.035);
+  box-shadow:
+    0 28px 65px rgba(76, 29, 149, 0.17),
+    0 8px 20px rgba(76, 29, 149, 0.1);
+}
+
+.dashboard-plan-card:not(.dashboard-plan-card-active) {
+  transform:
+    perspective(900px)
+    rotateY(-4deg)
+    scale(0.91);
+}
+
+
+/* Decorative glow */
+
+.dashboard-plan-glow {
+  position: absolute;
+  top: -80px;
+  right: -65px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.2),
+      rgba(139, 92, 246, 0) 70%
+    );
+  pointer-events: none;
+}
+
+
+/* Card heading */
+
+.dashboard-plan-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.dashboard-plan-icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 16px;
+  color: #ffffff;
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #5520b9
+    );
+  box-shadow:
+    0 10px 24px rgba(91, 33, 182, 0.24);
+  font-size: 1.35rem;
+}
+
+.dashboard-plan-type {
+  color: var(--primary-600);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dashboard-plan-top h3 {
+  margin: 4px 0 0;
+  color: #2d253e;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.dashboard-plan-code {
+  margin: 15px 0;
+  color: var(--muted);
+  font-size: 0.69rem;
+}
+
+
+/* Premium display */
+
+.dashboard-plan-price {
+  padding: 17px;
+  border: 1px solid #e8e1f5;
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary-50),
+      #ffffff
+    );
+}
+
+.dashboard-plan-price span,
+.dashboard-plan-price strong,
+.dashboard-plan-price small {
+  display: block;
+}
+
+.dashboard-plan-price span {
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.dashboard-plan-price strong {
+  margin-top: 3px;
+  color: var(--primary-800);
+  font-size: 1.45rem;
+}
+
+.dashboard-plan-price small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.66rem;
+}
+
+
+/* Coverage and term */
+
+.dashboard-plan-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 16px 0;
+}
+
+.dashboard-plan-stats > div {
+  padding: 4px 10px 4px 0;
+}
+
+.dashboard-plan-stats > div + div {
+  padding-left: 13px;
+  border-left: 1px solid #e9e4f0;
+}
+
+.dashboard-plan-stats dt {
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+
+.dashboard-plan-stats dd {
+  margin: 4px 0 0;
+  color: #342c45;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+
+/* Card actions */
+
+.dashboard-plan-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.dashboard-plan-actions .btn {
+  width: 100%;
+  min-height: 40px;
+}
+
+
+/* Left / right carousel arrows */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #ded4ef;
+  border-radius: 50%;
+
+  color: var(--primary-700);
+  background: rgba(255, 255, 255, 0.98);
+
+  box-shadow:
+    0 8px 22px rgba(46, 27, 81, 0.13);
+
+  cursor: pointer;
+
+  font-size: 0;
+  line-height: 1;
+
+  transform: translateY(-50%);
+
+  transition:
+    background 150ms ease,
+    color 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.carousel-arrow::before {
+  display: block;
+  color: currentColor;
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.carousel-arrow-left::before {
+  content: "‹";
+  transform: translateY(-1px);
+}
+
+.carousel-arrow-right::before {
+  content: "›";
+  transform: translateY(-1px);
+}
+
+
+.carousel-arrow:hover {
+  color: #ffffff;
+  background: var(--primary-700);
+  box-shadow:
+    0 12px 28px rgba(76, 29, 149, 0.22);
+
+  transform:
+    translateY(-50%)
+    scale(1.08);
+}
+
+.carousel-arrow:focus-visible {
+  outline: 3px solid rgba(124, 58, 237, 0.25);
+  outline-offset: 3px;
+}
+
+.carousel-arrow-left {
+  left: 3px;
+}
+
+.carousel-arrow-right {
+  right: 3px;
+}
+
+
+/* Slide indicators */
+
+.carousel-indicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: -5px;
+}
+
+.carousel-dot {
+  width: 7px;
+  height: 7px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0;
+  background: #d5cce3;
+  cursor: pointer;
+  transition:
+    width 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.carousel-dot:hover {
+  background: #a998c9;
+  transform: scale(1.15);
+}
+
+.carousel-dot-active {
+  width: 24px;
+  background: var(--primary-600);
+}
+
+
+/* Loading cards */
+
+.dashboard-plan-skeleton {
+  min-height: 340px;
+  opacity: 1;
+  background:
+    linear-gradient(
+      100deg,
+      #f3f0f7 20%,
+      #fbfafd 40%,
+      #f3f0f7 60%
+    );
+  background-size: 200% 100%;
+  animation: dashboard-plan-shimmer 1.4s infinite;
+}
+
+@keyframes dashboard-plan-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .carousel-stage {
+    padding-inline: 45px;
+  }
+
+  .dashboard-plan-card {
+    min-width: 320px;
+    max-width: 320px;
+    flex-basis: 320px;
+  }
+
+  .dashboard-plan-carousel {
+    padding-inline: calc(50% - 160px);
+  }
+}
+
+
+/* Mobile */
+
+@media (max-width: 680px) {
+  .dashboard-plans-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-plans-heading .btn {
+    width: 100%;
+  }
+
+  .carousel-stage {
+    padding: 10px 34px 22px;
+  }
+
+  .dashboard-plan-carousel {
+    gap: 14px;
+    padding:
+      18px
+      calc(50% - 145px)
+      28px;
+  }
+
+  .dashboard-plan-card {
+    min-width: 290px;
+    max-width: 290px;
+    flex-basis: 290px;
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .dashboard-plan-card-active {
+    transform:
+      perspective(900px)
+      translateY(-4px)
+      scale(1.01);
+  }
+
+  .carousel-arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 1.5rem;
+  }
+
+  .carousel-arrow-left {
+    left: -2px;
+  }
+
+  .carousel-arrow-right {
+    right: -2px;
+  }
+
+  .dashboard-plan-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-plan-price strong {
+    font-size: 1.25rem;
+  }
+}
+
+
+/* Very small screens */
+
+@media (max-width: 380px) {
+  .carousel-stage {
+    padding-inline: 25px;
+  }
+
+  .dashboard-plan-carousel {
+    padding-inline: calc(50% - 130px);
+  }
+
+  .dashboard-plan-card {
+    min-width: 260px;
+    max-width: 260px;
+    flex-basis: 260px;
+  }
+
+  .carousel-arrow {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+
+/* Respect reduced-motion preference */
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-plan-carousel {
+    scroll-behavior: auto;
+  }
+
+  .dashboard-plan-card,
+  .carousel-arrow,
+  .carousel-dot {
+    transition: none;
+  }
+
+  .dashboard-plan-skeleton {
+    animation: none;
+  }
+}
+
+/* =========================================
+   MY INSURANCE POLICIES
+   ========================================= */
+
+.my-policies-section {
+  margin-top: 2px;
+}
+
+.my-policies-heading {
+  margin: 0 0 17px;
+}
+
+.my-policies-heading h2 {
+  margin: 4px 0 5px;
+  color: #29213e;
+  font-size: 1.3rem;
+}
+
+
+/* Policy grid */
+
+.owned-policy-grid:has(
+  > .owned-policy-card:only-child
+) {
+  grid-template-columns:
+    minmax(500px, 760px);
+}
+
+.owned-policy-grid:has(
+  > .owned-policy-card:nth-child(2):last-child
+) {
+  grid-template-columns:
+    repeat(2, minmax(340px, 560px));
+}
+
+
+.owned-policy-grid
+  > .owned-policy-card:only-child {
+  display: grid;
+  grid-template-columns:
+    minmax(270px, 1.25fr)
+    minmax(210px, 0.9fr);
+  column-gap: 24px;
+}
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-header {
+  grid-column: 1 / -1;
+}
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-coverage {
+  grid-column: 1;
+}
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-stats {
+  grid-column: 2;
+  align-self: stretch;
+  margin-top: 19px;
+}
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-dates {
+  grid-column: 1;
+}
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-actions {
+  grid-column: 2;
+  align-self: end;
+}
+
+
+@media (max-width: 760px) {
+  .owned-policy-grid,
+  .owned-policy-grid:has(
+    > .owned-policy-card:only-child
+  ),
+  .owned-policy-grid:has(
+    > .owned-policy-card:nth-child(2):last-child
+  ) {
+    grid-template-columns: 1fr;
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child {
+    display: flex;
+  }
+}
+
+/* Individual policy card */
+
+.owned-policy-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 21px;
+  border: 1px solid #e5dff0;
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #ffffff 68%,
+      #faf8ff 100%
+    );
+  box-shadow:
+    0 10px 28px rgba(48, 31, 80, 0.07),
+    0 2px 7px rgba(48, 31, 80, 0.04);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.owned-policy-card:hover {
+  border-color: #cfc0ef;
+  box-shadow:
+    0 20px 45px rgba(68, 38, 121, 0.12),
+    0 4px 10px rgba(68, 38, 121, 0.06);
+  transform: translateY(-3px);
+}
+
+
+/* Decorative background */
+
+.owned-policy-decoration {
+  position: absolute;
+  top: -65px;
+  right: -60px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(124, 58, 237, 0.12),
+      rgba(124, 58, 237, 0) 68%
+    );
+  pointer-events: none;
+}
+
+
+/* Card header */
+
+.owned-policy-header {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns:
+    auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.owned-policy-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 15px;
+  color: #ffffff;
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #5020a8
+    );
+  box-shadow:
+    0 9px 22px rgba(91, 33, 182, 0.22);
+  font-size: 1.25rem;
+}
+
+.owned-policy-title {
+  min-width: 0;
+}
+
+.owned-policy-title > span {
+  color: var(--primary-600);
+  font-size: 0.63rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.owned-policy-title h3 {
+  overflow: hidden;
+  margin: 3px 0;
+  color: #302640;
+  font-size: 0.93rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.owned-policy-title p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.67rem;
+}
+
+
+/* Status */
+
+.owned-policy-status {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: #13795b;
+  background: #e8f8f1;
+  font-size: 0.62rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.owned-policy-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.owned-policy-status-inactive,
+.owned-policy-status-expired,
+.owned-policy-status-cancelled {
+  color: #b42318;
+  background: #fef0ee;
+}
+
+
+/* Main coverage */
+
+.owned-policy-coverage {
+  margin-top: 19px;
+  padding: 17px;
+  border: 1px solid #e8e1f5;
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      135deg,
+      #f7f3ff,
+      #ffffff
+    );
+}
+
+.owned-policy-coverage span,
+.owned-policy-coverage strong,
+.owned-policy-coverage small {
+  display: block;
+}
+
+.owned-policy-coverage span {
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 650;
+}
+
+.owned-policy-coverage strong {
+  margin-top: 3px;
+  color: var(--primary-800);
+  font-size: 1.42rem;
+  line-height: 1.2;
+}
+
+.owned-policy-coverage small {
+  margin-top: 4px;
+  color: #898196;
+  font-size: 0.61rem;
+}
+
+
+/* Premium / term */
+
+.owned-policy-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 15px 0;
+  border-top: 1px solid #eeeaf4;
+  border-bottom: 1px solid #eeeaf4;
+}
+
+.owned-policy-stats > div {
+  padding: 12px 8px 12px 0;
+}
+
+.owned-policy-stats > div + div {
+  padding-left: 14px;
+  border-left: 1px solid #eeeaf4;
+}
+
+.owned-policy-stats dt {
+  color: var(--muted);
+  font-size: 0.64rem;
+}
+
+.owned-policy-stats dd {
+  margin: 4px 0 1px;
+  color: #342c45;
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.owned-policy-stats small {
+  color: var(--muted);
+  font-size: 0.61rem;
+}
+
+
+/* Policy timeline */
+
+.owned-policy-dates {
+  display: grid;
+  grid-template-columns:
+    minmax(85px, 1fr)
+    minmax(45px, 0.55fr)
+    minmax(85px, 1fr);
+  align-items: center;
+  margin: 2px 0 17px;
+}
+
+.owned-policy-dates > div:first-child {
+  text-align: left;
+}
+
+.owned-policy-dates > div:last-child {
+  text-align: right;
+}
+
+.owned-policy-dates span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.61rem;
+}
+
+.owned-policy-dates strong {
+  display: block;
+  margin-top: 3px;
+  color: #41394f;
+  font-size: 0.7rem;
+}
+
+.owned-policy-date-line {
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.owned-policy-date-line span {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: var(--primary-500);
+  box-shadow:
+    0 0 0 1px var(--primary-300, #a78bfa);
+}
+
+.owned-policy-date-line div {
+  height: 2px;
+  flex: 1;
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary-500),
+      #c4b5fd
+    );
+}
+
+
+/* Actions */
+
+.owned-policy-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: auto;
+}
+
+.owned-policy-actions .btn {
+  width: 100%;
+  min-height: 40px;
+}
+
+
+/* Empty state */
+
+.owned-policy-empty {
+  display: grid;
+  grid-template-columns:
+    auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 17px;
+  padding: 22px;
+  border: 1px dashed #d6c9ec;
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      135deg,
+      #fbf9ff,
+      #ffffff
+    );
+}
+
+.owned-policy-empty-icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 15px;
+  color: var(--primary-700);
+  background: var(--primary-100);
+  font-size: 1.45rem;
+}
+
+.owned-policy-empty h3 {
+  margin: 0 0 4px;
+  color: #332a45;
+  font-size: 0.95rem;
+}
+
+.owned-policy-empty p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+
+/* Loading skeleton */
+
+.owned-policy-skeleton {
+  min-height: 365px;
+  opacity: 1;
+  background:
+    linear-gradient(
+      100deg,
+      #f2eff6 20%,
+      #fbfafc 40%,
+      #f2eff6 60%
+    );
+  background-size: 200% 100%;
+  animation:
+    owned-policy-shimmer 1.4s infinite;
+}
+
+@keyframes owned-policy-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+
+/* Tablet */
+
+
+/* Mobile */
+
+@media (max-width: 680px) {
+  .my-policies-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .owned-policy-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .owned-policy-card {
+    padding: 17px;
+  }
+
+  .owned-policy-header {
+    grid-template-columns:
+      auto minmax(0, 1fr);
+  }
+
+  .owned-policy-status {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .owned-policy-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .owned-policy-empty {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .owned-policy-empty-icon {
+    margin: 0 auto;
+  }
+
+  .owned-policy-empty .btn {
+    width: 100%;
+  }
+}
+
+.search-results-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 16px;
+}
+
+.search-results-summary > div {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.search-results-summary > div > strong {
+  color: var(--primary-700);
+  font-size: 1.2rem;
+}
+
+.search-results-summary > div > span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+
+/* Result layout */
+
+.search-policy-results {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        min(100%, 500px),
+        1fr
+      )
+    );
+  gap: 16px;
+}
+
+
+/* One search result */
+
+.search-policy-results
+  > .search-policy-card:only-child {
+  max-width: none;
+}
+
+
+/* Result card */
+
+.search-policy-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 19px;
+  border: 1px solid #e5dff0;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow:
+    0 7px 22px rgba(48, 31, 80, 0.06);
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease,
+    box-shadow 170ms ease;
+}
+
+.search-policy-card:hover {
+  border-color: #cfc1ec;
+  box-shadow:
+    0 15px 34px rgba(62, 34, 111, 0.1);
+  transform: translateY(-2px);
+}
+
+.search-policy-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background:
+    linear-gradient(
+      180deg,
+      #8b5cf6,
+      #4c1d95
+    );
+}
+
+
+/* Heading */
+
+.search-policy-heading {
+  display: grid;
+  grid-template-columns:
+    auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+}
+
+.search-policy-icon {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  border-radius: 12px;
+  color: #ffffff;
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #5520b9
+    );
+  font-size: 1rem;
+}
+
+.search-policy-name {
+  min-width: 0;
+}
+
+.search-policy-name > span {
+  color: var(--primary-600);
+  font-size: 0.61rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.search-policy-name h3 {
+  margin: 3px 0;
+  overflow: hidden;
+  color: #312841;
+  font-size: 0.9rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-policy-name p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+
+
+/* Customer details */
+
+.search-policy-customer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin-top: 15px;
+  overflow: hidden;
+  border: 1px solid #ebe5f3;
+  border-radius: 10px;
+  background: #ebe5f3;
+}
+
+.search-policy-customer > div {
+  padding: 10px 12px;
+  background: #faf9fc;
+}
+
+.search-policy-customer span,
+.search-policy-customer strong {
+  display: block;
+}
+
+.search-policy-customer span {
+  color: var(--muted);
+  font-size: 0.61rem;
+}
+
+.search-policy-customer strong {
+  margin-top: 3px;
+  color: #40374e;
+  font-size: 0.72rem;
+}
+
+
+/* Financial summary */
+
+.search-policy-financials {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 13px;
+}
+
+.search-policy-financials > div {
+  padding: 11px;
+  border: 1px solid #ebe5f3;
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      145deg,
+      #faf8ff,
+      #ffffff
+    );
+}
+
+.search-policy-financials span,
+.search-policy-financials strong {
+  display: block;
+}
+
+.search-policy-financials span {
+  color: var(--muted);
+  font-size: 0.59rem;
+}
+
+.search-policy-financials strong {
+  margin-top: 5px;
+  color: #342b45;
+  font-size: 0.78rem;
+}
+
+.search-money-paid {
+  color: #13795b !important;
+}
+
+.search-money-remaining {
+  color: #a84c1a !important;
+}
+
+
+/* Policy dates */
+
+.search-policy-period {
+  display: grid;
+  grid-template-columns:
+    auto minmax(50px, 1fr) auto;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.search-policy-period
+  > div:first-child {
+  text-align: left;
+}
+
+.search-policy-period
+  > div:last-child {
+  text-align: right;
+}
+
+.search-policy-period
+  > div > span,
+.search-policy-period
+  > div > strong {
+  display: block;
+}
+
+.search-policy-period
+  > div > span {
+  color: var(--muted);
+  font-size: 0.6rem;
+}
+
+.search-policy-period
+  > div > strong {
+  margin-top: 3px;
+  font-size: 0.69rem;
+}
+
+.search-period-line {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+}
+
+.search-period-line i {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--primary-500);
+}
+
+.search-period-line span {
+  height: 2px;
+  flex: 1;
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary-500),
+      #c4b5fd
+    );
+}
+
+
+/* Actions */
+
+.search-policy-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+.search-policy-actions .btn {
+  min-width: 145px;
+}
+
+
+/* Pagination */
+
+.search-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.search-pagination > span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+
+/* Empty result */
+
+.search-result-empty {
+  padding: 35px 20px;
+  text-align: center;
+}
+
+.search-result-empty-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 10px;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--primary-700);
+  background: var(--primary-100);
+  font-size: 1.3rem;
+}
+
+.search-result-empty h3 {
+  margin: 0 0 5px;
+  font-size: 0.92rem;
+}
+
+.search-result-empty p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+
+/* Responsive */
+
+@media (max-width: 760px) {
+  .search-results-summary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .search-policy-results {
+    grid-template-columns: 1fr;
+  }
+
+  .search-policy-financials {
+    grid-template-columns: 1fr;
+  }
+
+  .search-policy-customer {
+    grid-template-columns: 1fr;
+  }
+
+  .search-policy-period {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .search-policy-period
+    > div:last-child {
+    text-align: left;
+  }
+
+  .search-period-line {
+    display: none;
+  }
+
+  .search-policy-actions .btn {
+    width: 100%;
+  }
+
+  .search-pagination {
+    justify-content: space-between;
+  }
+}
+
+/* =========================================
+   FINAL DASHBOARD POLICY LAYOUT OVERRIDES
+   Keep this block at the END of App.css
+   ========================================= */
+
+
+/* Default: 3 policies per row */
+
+.owned-policy-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+
+/* =========================================
+   EXACTLY ONE POLICY
+   Full-width horizontal dashboard summary
+   ========================================= */
+
+.owned-policy-grid:has(
+  > .owned-policy-card:only-child
+) {
+  grid-template-columns: 1fr;
+}
+
+.owned-policy-grid
+  > .owned-policy-card:only-child {
+  width: 100%;
+  max-width: none;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 1.15fr)
+    minmax(180px, 0.8fr)
+    minmax(260px, 1fr);
+
+  grid-template-areas:
+    "header header status"
+    "coverage stats actions"
+    "dates dates actions";
+
+  align-items: stretch;
+  gap: 16px 24px;
+
+  padding: 24px 26px;
+}
+
+
+/* Header spans first two areas */
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-header {
+  grid-area: header;
+
+  grid-template-columns:
+    auto minmax(0, 1fr);
+
+  align-self: center;
+}
+
+
+/* Status badge */
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-status {
+  position: absolute;
+  top: 24px;
+  right: 26px;
+}
+
+
+/* Coverage */
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-coverage {
+  grid-area: coverage;
+
+  margin: 0;
+  min-height: 110px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+/* Premium + term */
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-stats {
+  grid-area: stats;
+
+  align-self: stretch;
+
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+
+/* Dates */
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-dates {
+  grid-area: dates;
+
+  margin: 0;
+
+  padding: 11px 14px;
+
+  border: 1px solid #eee8f6;
+  border-radius: 11px;
+
+  background: #faf9fc;
+}
+
+
+/* Buttons */
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-actions {
+  grid-area: actions;
+
+  display: flex;
+  flex-direction: column;
+
+  align-self: stretch;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin: 0;
+
+  padding-left: 5px;
+}
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-actions .btn {
+  width: 100%;
+  min-height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Larger coverage number for single policy */
+
+.owned-policy-grid
+  > .owned-policy-card:only-child
+  .owned-policy-coverage strong {
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+}
+
+
+/* =========================================
+   EXACTLY TWO POLICIES
+   ========================================= */
+
+.owned-policy-grid:has(
+  > .owned-policy-card:nth-child(2):last-child
+) {
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+}
+
+.owned-policy-grid:has(
+  > .owned-policy-card:nth-child(2):last-child
+)
+  > .owned-policy-card {
+  width: 100%;
+  max-width: none;
+}
+
+
+/* =========================================
+   3+ POLICIES
+   ========================================= */
+
+.owned-policy-card {
+  width: 100%;
+  max-width: none;
+}
+
+
+/* =========================================
+   MEDIUM SCREENS
+   ========================================= */
+
+@media (max-width: 1180px) {
+
+  .owned-policy-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .owned-policy-grid:has(
+    > .owned-policy-card:only-child
+  ) {
+    grid-template-columns: 1fr;
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child {
+
+    grid-template-columns:
+      minmax(250px, 1fr)
+      minmax(200px, 0.8fr);
+
+    grid-template-areas:
+      "header header"
+      "coverage stats"
+      "dates dates"
+      "actions actions";
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child
+    .owned-policy-actions {
+
+    flex-direction: row;
+
+    padding-left: 0;
+  }
+}
+
+
+/* =========================================
+   MOBILE / SMALL TABLET
+   ========================================= */
+
+@media (max-width: 760px) {
+
+  .owned-policy-grid,
+  .owned-policy-grid:has(
+    > .owned-policy-card:only-child
+  ),
+  .owned-policy-grid:has(
+    > .owned-policy-card:nth-child(2):last-child
+  ) {
+    grid-template-columns: 1fr;
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child {
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 18px;
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child
+    .owned-policy-header {
+
+    display: grid;
+
+    grid-template-columns:
+      auto minmax(0, 1fr);
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child
+    .owned-policy-status {
+
+    position: static;
+
+    align-self: flex-start;
+
+    margin-top: -4px;
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child
+    .owned-policy-coverage {
+
+    width: 100%;
+
+    margin-top: 6px;
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child
+    .owned-policy-stats {
+
+    width: 100%;
+
+    margin: 0;
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child
+    .owned-policy-dates {
+
+    width: 100%;
+  }
+
+  .owned-policy-grid
+    > .owned-policy-card:only-child
+    .owned-policy-actions {
+
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+
+    padding: 0;
+  }
+}
+
