@@ -2,7 +2,7 @@ import axios from 'axios';
 import { clearSession, readSession } from '../auth/session';
 
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://ganithanandakumar-capstone-env.eba-igpix63t.ap-south-1.elasticbeanstalk.com/api',
+  baseURL: process.env.REACT_APP_API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 

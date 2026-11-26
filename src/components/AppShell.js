@@ -1,9 +1,14 @@
-import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import {
+  NavLink,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import {
   detectPolicySearchType,
 } from '../utils/policySearch';
+
 
 const navigationItems = [
   {
@@ -45,6 +50,14 @@ export default function AppShell({
 
   const [searchValue, setSearchValue] = useState('');
 
+
+  const location = useLocation();
+const [sidebarOpen, setSidebarOpen] = useState(false);
+
+useEffect(() => {
+  setSidebarOpen(false);
+}, [location.pathname]);
+
   const initials =
     customer?.fullName
       ?.split(' ')
@@ -82,7 +95,23 @@ export default function AppShell({
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
+      {sidebarOpen && (
+  <button
+    type="button"
+    className="sidebar-overlay"
+    onClick={() => setSidebarOpen(false)}
+    aria-label="Close navigation"
+  />
+)}
+      <aside
+  id="main-navigation"
+  className={
+    sidebarOpen
+      ? 'sidebar sidebar-open'
+      : 'sidebar'
+  }
+  aria-label="Main navigation"
+>
         <div className="brand">
           <div
             className="brand-mark"
@@ -98,6 +127,14 @@ export default function AppShell({
               Secure Today. Healthier Tomorrow.
             </span>
           </div>
+          <button
+  type="button"
+  className="sidebar-close"
+  onClick={() => setSidebarOpen(false)}
+  aria-label="Close navigation"
+>
+  ×
+</button>
         </div>
 
         <nav
@@ -163,6 +200,24 @@ export default function AppShell({
 
       <div className="app-workspace">
         <header className="topbar">
+          <button
+  type="button"
+  className="mobile-menu-button"
+  onClick={() =>
+    setSidebarOpen((current) => !current)
+  }
+  aria-label={
+    sidebarOpen
+      ? 'Close navigation'
+      : 'Open navigation'
+  }
+  aria-expanded={sidebarOpen}
+  aria-controls="main-navigation"
+>
+  <span />
+  <span />
+  <span />
+</button>
           <div className="mobile-brand">
             <span
               className="brand-mark"

@@ -1,5 +1,5 @@
-import { attachToken, handleUnauthorized } from './client';
-import { readSession, writeSession } from '../auth/session';
+﻿import { attachToken, handleUnauthorized } from '../../api/client';
+import { readSession, writeSession } from '../../auth/session';
 
 describe('api client interceptors', () => {
   beforeEach(() => sessionStorage.clear());
@@ -44,3 +44,4 @@ describe('api client interceptors', () => {
     expect(readSession()).not.toBeNull();
   });
 });
+

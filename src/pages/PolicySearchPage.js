@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   Link,
   useSearchParams,
-} from 'react-router-dom';import { extractErrorMessage } from '../api/client';
+} from 'react-router-dom';
+import { extractErrorMessage } from '../api/client';
 import { searchPolicies } from '../api/dashboardApi';
 import AppShell from '../components/AppShell';
 import {
@@ -323,7 +324,7 @@ export default function PolicySearchPage() {
   return (
     <AppShell
       title="Policy Search"
-      subtitle="Find customer policies using approved search criteria."
+      subtitle="Search by Policy Identifier, Customer Name, or Policy Identifier and Date of Birth."
     >
       <div className="content">
         <section

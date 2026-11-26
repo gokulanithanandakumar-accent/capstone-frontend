@@ -1,14 +1,14 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+﻿import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { AppRoutes, routerFuture } from '../App';
-import { AuthProvider } from '../auth/AuthContext';
-import { writeSession } from '../auth/session';
-import { fetchRegistrationDetails, registerPolicy } from '../api/dashboardApi';
-import { todayIso } from '../utils/format';
+import { AppRoutes, routerFuture } from '../../App';
+import { AuthProvider } from '../../auth/AuthContext';
+import { writeSession } from '../../auth/session';
+import { fetchRegistrationDetails, registerPolicy } from '../../api/dashboardApi';
+import { todayIso } from '../../utils/format';
 
-jest.mock('../api/authApi');
-jest.mock('../api/dashboardApi');
+jest.mock('../../api/authApi');
+jest.mock('../../api/dashboardApi');
 
 const TERM_PRODUCT = {
   productId: 1,
@@ -56,6 +56,29 @@ function renderRegistration(state = { product: TERM_PRODUCT }) {
   );
 }
 
+
+async function waitForRegistrationDetails() {
+  const customerSection = await screen.findByRole(
+    'region',
+    { name: 'Customer Details' },
+  );
+
+  await waitFor(() => {
+    expect(
+      within(customerSection).getByText('15-04-1990'),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole(
+        'button',
+        { name: 'Register Policy' },
+      ),
+    ).toBeEnabled();
+  });
+
+  return customerSection;
+}
+
 describe('PolicyRegistrationPage', () => {
   beforeEach(() => {
     sessionStorage.clear();
@@ -72,11 +95,11 @@ describe('PolicyRegistrationPage', () => {
   test('pre-populates customer, product and calculated policy values', async () => {
     renderRegistration();
 
-    expect(await screen.findByText('Gokul')).toBeInTheDocument();
+    const customerSection = await waitForRegistrationDetails();
     expect(fetchRegistrationDetails).toHaveBeenCalledWith(1, todayIso());
-    expect(screen.getByText('15-04-1990')).toBeInTheDocument();
-    expect(screen.getByText('gokul@gmail.com')).toBeInTheDocument();
-    expect(screen.getByText('9000000002')).toBeInTheDocument();
+    expect(within(customerSection).getByText('15-04-1990')).toBeInTheDocument();
+    expect(within(customerSection).getByText('gokul@gmail.com')).toBeInTheDocument();
+    expect(within(customerSection).getByText('9000000002')).toBeInTheDocument();
     expect(screen.getByText('HealthDekho Secure Term')).toBeInTheDocument();
     expect(screen.getByText('Term')).toBeInTheDocument();
     expect(screen.getByText('240 months (20 years)')).toBeInTheDocument();
@@ -104,7 +127,7 @@ describe('PolicyRegistrationPage', () => {
 
   test('validates that the start date is present and not in the past', async () => {
     renderRegistration();
-    await screen.findByText('Gokul');
+    await waitForRegistrationDetails();
     const input = screen.getByLabelText('Policy Start Date');
 
     fireEvent.change(input, { target: { value: '2020-01-01' } });
@@ -129,7 +152,7 @@ describe('PolicyRegistrationPage', () => {
       message: 'Policy registered successfully. Your policy identifier is HDP-2026-0001.',
     });
     renderRegistration();
-    await screen.findByText('Gokul');
+    await waitForRegistrationDetails();
 
     userEvent.click(screen.getByRole('button', { name: 'Register Policy' }));
 
@@ -146,7 +169,7 @@ describe('PolicyRegistrationPage', () => {
   test('shows the duplicate registration error', async () => {
     registerPolicy.mockRejectedValue(apiError(409, 'You have already registered a policy for HealthDekho Secure Term.'));
     renderRegistration();
-    await screen.findByText('Gokul');
+    await waitForRegistrationDetails();
 
     userEvent.click(screen.getByRole('button', { name: 'Register Policy' }));
 
@@ -160,7 +183,7 @@ describe('PolicyRegistrationPage', () => {
     registerPolicy.mockRejectedValue(apiError(422,
       'You are not eligible for HealthDekho Secure Term. Entry age must be between 18 and 60 years (your age on the start date: 61).'));
     renderRegistration();
-    await screen.findByText('Gokul');
+    await waitForRegistrationDetails();
 
     userEvent.click(screen.getByRole('button', { name: 'Register Policy' }));
 
@@ -170,7 +193,7 @@ describe('PolicyRegistrationPage', () => {
   test('shows a fallback message when registration fails unexpectedly', async () => {
     registerPolicy.mockRejectedValue(new Error('Network Error'));
     renderRegistration();
-    await screen.findByText('Gokul');
+    await waitForRegistrationDetails();
 
     userEvent.click(screen.getByRole('button', { name: 'Register Policy' }));
 
@@ -185,3 +208,5 @@ describe('PolicyRegistrationPage', () => {
     expect(screen.getByRole('button', { name: 'Register Policy' })).toBeDisabled();
   });
 });
+
+

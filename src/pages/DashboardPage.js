@@ -4,7 +4,8 @@ import { extractErrorMessage } from '../api/client';
 import {
   fetchAvailableProducts,
   fetchMyPolicies,
-} from '../api/dashboardApi';import { useAuth } from '../auth/AuthContext';
+} from '../api/dashboardApi';
+import { useAuth } from '../auth/AuthContext';
 import { formatCurrency, formatDate, formatEnum, formatTerm } from '../utils/format';
 import AppShell from '../components/AppShell';
 import DashboardPlanCarousel from '../components/DashboardPlanCarousel';

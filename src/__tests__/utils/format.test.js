@@ -1,4 +1,4 @@
-import { formatCurrency, formatDate, formatEnum, formatTerm } from './format';
+﻿import { formatCurrency, formatDate, formatEnum, formatTerm } from '../../utils/format';
 
 describe('format utils', () => {
   test('formats currency in INR', () => {
@@ -25,3 +25,4 @@ describe('format utils', () => {
     expect(formatEnum('')).toBe('-');
   });
 });
+

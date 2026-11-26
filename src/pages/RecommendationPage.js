@@ -477,8 +477,7 @@ export default function RecommendationsPage() {
             </span>
             <h3>Database-restricted results</h3>
             <p>
-              Recommendations can reference only active products available to
-              the authenticated customer.
+              We recommend plans based on your details, preferences, and the options available to you.
             </p>
           </section>
 
