@@ -112,10 +112,10 @@ export default function LoginPage() {
     useState('login');
 
   const [email, setEmail] =
-    useState('');
+    useState('demo@gmail.com');
 
   const [password, setPassword] =
-    useState('');
+    useState('Password@123');
 
   const [
     registration,
